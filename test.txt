@@ -1,0 +1,29 @@
+Private Sub CommandButton1_Click()
+        Range("B2:E7").Select
+    Selection.ClearContents
+
+End Sub
+
+Sub ValueToComment()
+'Updateby20160711Extendoffice
+    Dim xRg As Range
+    Dim xTxt As String
+    Dim xCell As Range
+    On Error Resume Next
+    If ActiveWindow.RangeSelection.Count > 1 Then
+      xTxt = ActiveWindow.RangeSelection.AddressLocal
+    Else
+      xTxt = ActiveSheet.UsedRange.AddressLocal
+    End If
+    Set xRg = Application.InputBox("Select cells you want to insert comment with formula result:", "Kutools for Excel", xTxt, , , , , 8)
+    If xRg Is Nothing Then Exit Sub
+    On Error Resume Next
+    Application.ScreenUpdating = False
+    For Each xCell In xRg
+        If xCell.HasFormula Then
+            xCell.Comment.Delete
+            xCell.AddComment CStr(xCell.Value)
+        End If
+    Next
+    Application.ScreenUpdating = True
+End Sub
